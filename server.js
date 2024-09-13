@@ -44,3 +44,5 @@ conn(URI).then(() => {
     console.log(`Example app listening on port ${port}`);
   });
 });
+
+export default app;
