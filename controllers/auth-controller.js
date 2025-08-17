@@ -3,16 +3,14 @@ import bcrypt from "bcrypt";
 
 const registration = async (req, res, next) => {
   try {
-    const { username, email, phone, password } = req.body;
+    const { email, phone, password } = req.body;
     const userExist = await User.findOne({ email });
-
     if (userExist) {
       return res
         .status(400)
         .json({ error: true, message: "User Already Exist" });
     }
-
-    const userCreated = await User.create({ username, email, phone, password });
+    const userCreated = await User.create({ email, phone, password });
     res.status(201).json({ error: false, message: userCreated });
   } catch (error) {
     next(error);
@@ -25,11 +23,11 @@ const login = async (req, res) => {
     const userExist = await User.findOne({ email });
 
     if (!userExist) {
-      return res.status(400).json({error:true, message: "Invalid Credetials" });
+      return res
+        .status(400)
+        .json({ error: true, message: "Invalid Credetials" });
     }
-
     const user = await bcrypt.compare(password, userExist.password);
-
     if (user) {
       res.status(200).json({
         message: "Login Success",
